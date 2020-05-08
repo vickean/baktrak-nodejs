@@ -1,0 +1,9 @@
+{
+  "name": "baktrak-nodejs",
+  "version": "1.0.0",
+  "description": "backend for baktrak contact tracing app",
+  "main": "index.ts",
+  "repository": "https://github.com/vickean/baktrak-nodejs",
+  "author": "vickean",
+  "license": "MIT"
+}
