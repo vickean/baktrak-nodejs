@@ -1,4 +1,4 @@
-import { Field, InterfaceType } from "type-graphql";
+import { Field, InterfaceType, registerEnumType } from "type-graphql";
 import { PrimaryGeneratedColumn, Column } from "typeorm";
 
 @InterfaceType()
@@ -27,3 +27,10 @@ export abstract class EntityBase {
    @Field()
    address: string;
 }
+
+export enum Order {
+   desc = "DESC",
+   asc = "ASC",
+}
+
+registerEnumType(Order, { name: "Order" });

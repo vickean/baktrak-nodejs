@@ -6,12 +6,13 @@ import Express from "express";
 import cors from "cors";
 import { createConnection } from "typeorm";
 import { LocationResolver } from "modules/location/LocationResolver";
+import { UserLocAsgResolver } from "modules/userLocAsg/UserLocAsgResolver";
 
 const main = async () => {
    await createConnection();
 
    const schema = await buildSchema({
-      resolvers: [UserResolver, LocationResolver],
+      resolvers: [UserResolver, LocationResolver, UserLocAsgResolver],
    });
 
    const apolloServer = new ApolloServer({
