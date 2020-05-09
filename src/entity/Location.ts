@@ -3,10 +3,10 @@ import { ObjectType, Field } from "type-graphql";
 import { EntityBase } from "./Base";
 
 @ObjectType({ implements: EntityBase })
-@Entity({ name: "c_user" })
-@Unique(["phoneNo"])
-export class User extends EntityBase {
-   @Column({ default: false })
+@Entity({ name: "c_location" })
+@Unique(["address", "idPhrase"])
+export class Location extends EntityBase {
+   @Column()
    @Field()
-   isAdmin: boolean;
+   idPhrase: string;
 }

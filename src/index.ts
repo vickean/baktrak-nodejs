@@ -1,13 +1,17 @@
+import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "modules/user/UserResolver";
 import Express from "express";
 import cors from "cors";
-import "reflect-metadata";
+import { createConnection } from "typeorm";
+import { LocationResolver } from "modules/location/LocationResolver";
 
 const main = async () => {
+   await createConnection();
+
    const schema = await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, LocationResolver],
    });
 
    const apolloServer = new ApolloServer({
@@ -33,7 +37,7 @@ const main = async () => {
    const portNum = 4000;
 
    app.listen(portNum, () => {
-      console.log(`BakTrak Server started on port ${portNum}`);
+      console.log(`BakTrak Server started on http://localhost:${portNum}/graphql`);
    });
 };
 
