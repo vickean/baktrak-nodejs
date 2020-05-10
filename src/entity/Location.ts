@@ -4,7 +4,7 @@ import { EntityBase } from "./Base";
 
 @ObjectType({ implements: EntityBase })
 @Entity({ name: "c_location" })
-@Unique(["address", "idPhrase"])
+@Unique(["address", "idPhrase", "phoneNo"])
 export class Location extends EntityBase {
    @Column()
    @Field()

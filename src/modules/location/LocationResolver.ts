@@ -21,6 +21,29 @@ export class LocationResolver {
       return locationData;
    }
 
+   @Mutation(() => Location)
+   async loginUser(
+      @Arg("phoneNo") phoneNo: string,
+      @Arg("password") password: string
+   ) {
+      const location = await getRepository(Location)
+         .createQueryBuilder("loc")
+         .where("loc.phoneNo = :phoneNo", { phoneNo })
+         .getOne();
+
+      if (location === undefined) {
+         throw new Error("PhoneNo does not exist. Please register.");
+      }
+
+      const validatePassword = await bcrypt.compare(password, location.password);
+
+      if (!validatePassword) {
+         throw new Error("Invalid password");
+      }
+
+      return location;
+   }
+
    @Mutation(() => Boolean)
    async createLocation(
       @Arg("name") name: string,
@@ -34,10 +57,11 @@ export class LocationResolver {
          .createQueryBuilder("loc")
          .where("loc.address = :address", { address })
          .orWhere("loc.idPhrase = :idPhrase", { idPhrase })
+         .orWhere("loc.phoneNo = :phoneNo", { phoneNo })
          .getOne();
 
       if (currentLocation !== undefined) {
-         throw new Error("Address or idPhrase is already in use.");
+         throw new Error("Address or idPhrase or phoneNo is already in use.");
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -73,7 +97,9 @@ export class LocationResolver {
             new Brackets((qb) => {
                qb.where("loc.address = :address", {
                   address,
-               }).orWhere("loc.idPhrase = :idPhrase", { idPhrase });
+               })
+                  .orWhere("loc.idPhrase = :idPhrase", { idPhrase })
+                  .orWhere("loc.phoneNo = :phoneNo", { phoneNo });
             })
          )
          .getOne();

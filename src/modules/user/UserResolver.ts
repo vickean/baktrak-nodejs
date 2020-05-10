@@ -21,6 +21,29 @@ export class UserResolver {
       return userData;
    }
 
+   @Mutation(() => User)
+   async loginUser(
+      @Arg("phoneNo") phoneNo: string,
+      @Arg("password") password: string
+   ) {
+      const user = await getRepository(User)
+         .createQueryBuilder("user")
+         .where("user.phoneNo = :phoneNo", { phoneNo })
+         .getOne();
+
+      if (user === undefined) {
+         throw new Error("PhoneNo does not exist. Please register.");
+      }
+
+      const validatePassword = await bcrypt.compare(password, user.password);
+
+      if (!validatePassword) {
+         throw new Error("Invalid password");
+      }
+
+      return user;
+   }
+
    @Mutation(() => Boolean)
    async createUser(
       @Arg("name") name: string,
