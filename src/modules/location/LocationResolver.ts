@@ -22,7 +22,7 @@ export class LocationResolver {
    }
 
    @Mutation(() => Location)
-   async loginUser(
+   async loginLocation(
       @Arg("phoneNo") phoneNo: string,
       @Arg("password") password: string
    ) {
