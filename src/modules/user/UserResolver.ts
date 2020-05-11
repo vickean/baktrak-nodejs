@@ -12,10 +12,14 @@ export class UserResolver {
    }
 
    @Query(() => User)
-   async User(@Arg("id") id: string) {
+   async User(
+      @Arg("id") id: string,
+      @Arg("phoneNo", { nullable: true }) phoneNo: string
+   ) {
       const userData = await getRepository(User)
          .createQueryBuilder("user")
          .where("user.id = :id", { id })
+         .orWhere("user.phoneNo = :phoneNo", { phoneNo })
          .getOne();
 
       return userData;
