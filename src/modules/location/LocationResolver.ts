@@ -21,6 +21,19 @@ export class LocationResolver {
       return locationData;
    }
 
+   @Query(() => Boolean)
+   async isIdPhraseTaken(@Arg("idPhrase") idPhrase: string) {
+      const idCheck = await getRepository(Location)
+         .createQueryBuilder("loc")
+         .select("loc.idPhrase")
+         .where("loc.idPhrase = :idPhrase", { idPhrase })
+         .getOne();
+
+      console.log("taken>>> ", idCheck);
+
+      return idCheck !== undefined;
+   }
+
    @Mutation(() => Location)
    async loginLocation(
       @Arg("phoneNo") phoneNo: string,

@@ -1,7 +1,8 @@
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
-import { getRepository, Between, AdvancedConsoleLogger } from "typeorm";
-import { UserLocAsg } from "entity/UserLocAsg";
+import { getRepository, Between } from "typeorm";
+import { UserLocAsg, UserListOutput } from "entity/UserLocAsg";
 import { Order } from "entity/Base";
+import { Location } from "entity/Location";
 
 @Resolver()
 export class UserLocAsgResolver {
@@ -12,6 +13,24 @@ export class UserLocAsgResolver {
    ) {
       console.log("UserLocAsg Hello>> ", name, age);
       return "UserLocAsg Hello";
+   }
+
+   @Query(() => [UserListOutput])
+   async UserLocAsgList(@Arg("userId") userId: string) {
+      const history = await getRepository(UserLocAsg)
+         .createQueryBuilder("asg")
+         .select("asg.dateTime", "dateTime")
+         .addSelect("loc.name", "name")
+         .addSelect("loc.address", "address")
+         .innerJoin(Location, "loc", "asg.locationId = loc.id")
+         .where("asg.userId = :userId", { userId })
+         .orderBy("asg.dateTime", "DESC")
+         .limit(20)
+         .getRawMany();
+
+      // console.log("LIST>>> ", history);
+
+      return history;
    }
 
    @Query(() => [UserLocAsg])

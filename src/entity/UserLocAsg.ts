@@ -20,3 +20,15 @@ export class UserLocAsg {
    @Field()
    dateTime: Date;
 }
+
+@ObjectType()
+export class UserListOutput {
+   @Field()
+   dateTime: String;
+
+   @Field()
+   name: String;
+
+   @Field()
+   address: String;
+}
